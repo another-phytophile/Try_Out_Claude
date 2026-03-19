@@ -1,0 +1,38 @@
+# Example Experiment Configuration
+# Use this as a template for your own experiments
+
+experiment:
+  name: "baseline_run"
+  description: "Initial baseline experiment"
+  seed: 42
+
+data:
+  source: "data/untracked/raw_data.csv"
+  test_size: 0.2
+  validation_size: 0.1
+  random_state: 42
+
+preprocessing:
+  normalize: true
+  handle_missing: "mean"
+  remove_outliers: false
+  outlier_threshold: 3.0
+
+model:
+  type: "random_forest"
+  hyperparameters:
+    n_estimators: 100
+    max_depth: 10
+    min_samples_split: 5
+    random_state: 42
+
+training:
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.001
+  patience: 10
+
+evaluation:
+  metrics: ["accuracy", "precision", "recall", "f1"]
+  save_results: true
+  results_dir: "results/"
