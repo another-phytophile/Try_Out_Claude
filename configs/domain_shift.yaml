@@ -1,0 +1,61 @@
+# Domain Shift Analysis — Experiment Configuration
+# Run with: uv run scripts/run_domain_shift.py --config configs/domain_shift.yaml
+
+experiment:
+  name: domain_shift_dako
+  seed: 42
+  results_dir: results/logs
+  log_dir: results/logs
+
+# ── Embedding models ─────────────────────────────────────────────────────────
+# Each entry: name (key into model registry) + optional hf model ID override.
+# Remove entries to skip a model.
+models:
+  - name: kaiko
+    # model_id: "hf-hub:kaiko-ai/vit-b-16"   # uncomment to override default
+  - name: conch
+    # model_id: "hf-hub:MahmoodLab/conch"
+  - name: virchow
+    # model_id: "hf-hub:paige-ai/Virchow"
+
+device: cuda   # or "cpu" if no GPU available
+
+# ── Embedding extraction ─────────────────────────────────────────────────────
+extraction:
+  batch_size: 64
+  force_reextract: false   # set true to overwrite existing caches
+  splits:                  # which splits to extract (order matters for caching)
+    - train
+    - valid
+    - test
+
+# ── Domain shift conditions ──────────────────────────────────────────────────
+# within_valid  : train 80% / test 20% of valid (no domain shift)
+# train_to_valid: train on train, test on valid (baseline)
+# train_to_test : train on train, test on test  (domain-shifted)
+conditions:
+  - within_valid
+  - train_to_valid
+  - train_to_test
+
+within_valid_train_frac: 0.8   # fraction of valid used as train in within_valid
+
+# ── Classification tasks ─────────────────────────────────────────────────────
+# cancer_type : 31-class TCGA cancer type prediction
+# tss         : Tissue Source Site (hospital) prediction
+tasks:
+  - cancer_type
+  - tss
+
+# ── Classifiers ──────────────────────────────────────────────────────────────
+classifiers:
+  - logistic
+  - knn
+  - lda      # Linear Discriminant Analysis (canonical linear classifier)
+
+# KNN k-values to sweep
+knn_values: [50, 100, 200, 500, 1000]
+
+logistic:
+  max_iter: 1000
+  n_jobs: -1

@@ -1,0 +1,32 @@
+[project]
+name = "research-repo"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "datasets>=2.18",
+    "torch>=2.1",
+    "torchvision>=0.16",
+    "transformers>=4.38",
+    "timm>=0.9.16",
+    "open-clip-torch>=2.24",
+    "scikit-learn>=1.4",
+    "numpy>=1.26",
+    "pandas>=2.1",
+    "tqdm>=4.66",
+    "pyyaml>=6.0",
+    "python-dotenv>=1.0",
+    "huggingface-hub>=0.21",
+    "Pillow>=10.0",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = ["jupyter", "ipython", "ipywidgets"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.backends.legacy:build"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
